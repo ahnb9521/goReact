@@ -61,6 +61,9 @@ func movieSearch(c echo.Context) error {
 
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	fmt.Println("data >>>> ", string(data))
 	return c.String(http.StatusOK, string(data))
 }
