@@ -1,0 +1,26 @@
+.App{
+    text-align: center;
+    padding-top: 250px;
+}
+
+.Title {
+    font-family: 'Chelsea Market', cursive;
+    font-size: 60px;
+}
+
+.search_movieNm {
+    width: 30em;
+    height: 3em;
+    border-radius: 25px;
+    border: 2px solid #b4b4b4;
+    padding-left: 20px;
+    font-size: 1em;
+}
+
+.movie-img {
+    line-height:158px;
+}
+
+.img {
+    vertical-align: midd;
+}
