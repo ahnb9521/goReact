@@ -23,7 +23,7 @@ func main() {
 	}))
 
 	e.GET("/test", test)
-	e.GET("/search1", movieSearch)
+	e.GET("/search", movieSearch)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 

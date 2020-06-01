@@ -25,7 +25,7 @@ class Search extends React.Component {
     getMovies = async () => {
         const {data: {
                 items
-            }} = await Axios.get(endpoint + "/search1", {
+            }} = await Axios.get(endpoint + "/search", {
             params: {
                 query: "설국"
             }
