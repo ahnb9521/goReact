@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
         <Route path="/" exact={true} component={Main}/>
-        <Route path="/search1" component={Search}/>
+        <Route path="/search" component={Search}/>
     </BrowserRouter>
     );
 }

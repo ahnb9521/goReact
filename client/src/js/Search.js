@@ -23,11 +23,14 @@ class Search extends React.Component {
     }
 
     getMovies = async () => {
+
+        const {location} = this.props;
+        const search = location.state.search;
         const {data: {
                 items
             }} = await Axios.get(endpoint + "/search", {
             params: {
-                query: "설국"
+                query: search
             }
         })
         console.log(items)
