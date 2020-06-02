@@ -28,7 +28,7 @@ class Search extends React.Component {
 
                         }
                     }}>
-                        <div>
+                        <div className="movie__box">
                             <div><img src={movie.image} alt={movie.title} title={movie.title}/></div>
                             <div dangerouslySetInnerHTML={{__html: movie.title}}></div>
                             <div>test</div>
