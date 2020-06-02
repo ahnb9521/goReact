@@ -1,13 +1,16 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Main from './js/Main'
 import Search from './js/Search'
 
 function App() {
   return (
     <BrowserRouter>
-        <Route path="/" exact={true} component={Main}/>
-        <Route path="/search" component={Search}/>
+        <Switch>
+          <Route path="/" exact={true} component={Main}/>
+          <Route path="/search" component={Search}/>
+          <Redirect path="*" to="/" />
+        </Switch>
     </BrowserRouter>
     );
 }
