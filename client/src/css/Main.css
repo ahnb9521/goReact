@@ -34,6 +34,7 @@ body {
 
 .movie__box {
     width: 750px;
+    height: 200px;
     box-shadow: 5px 5px 10px 1px grey;
     float: left;
     margin-right: 30px;
@@ -41,4 +42,17 @@ body {
     border-radius: 10px;
 }
 
+.movie__img {
+    width: 110px;
+    height: 157px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    box-shadow: 5px 5px 10px 1px grey;
+    float: left;
+}
+
+.movie__Nm {
+    padding-top: 20px;
+}
 
