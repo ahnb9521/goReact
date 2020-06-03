@@ -38,6 +38,20 @@ class Search extends React.Component {
                     
                 ))}
                 </div>
+                <div className="ranking">
+                    <h5>영화 순위</h5>
+                    <hr></hr>
+                    <p>1.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                    <p>2.sdsds</p>
+                </div>
             </div>
         )
     }

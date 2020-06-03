@@ -65,5 +65,6 @@ func movieSearch(c echo.Context) error {
 		log.Fatalln(err)
 	}
 	fmt.Println("data >>>> ", string(data))
+
 	return c.String(http.StatusOK, string(data))
 }
