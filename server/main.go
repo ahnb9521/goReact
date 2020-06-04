@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,6 +11,25 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
+
+type item struct {
+	Title      string `json:"title"`
+	Link       string `json:"link"`
+	Image      string `json:"image"`
+	Subtitle   string `json:"subtitle"`
+	PubDate    string `json:"pubDate"`
+	Director   string `json:"director"`
+	Actor      string `json:"actor"`
+	UserRating string `json:"userRating"`
+}
+
+type movieData struct {
+	LastBuildDate string `json:"lastBuildDate"`
+	Items         []item `json:"items"`
+	Total         int    `json:"total"`
+	Start         int    `json:"start"`
+	Display       int    `json:"display"`
+}
 
 func main() {
 	e := echo.New()
@@ -36,7 +56,6 @@ func movieSearch(c echo.Context) error {
 
 	v := url.Values{}
 	v.Set("query", c.QueryParam("query"))
-	fmt.Println("파라미터 : " + c.QueryParam("query"))
 
 	u := &url.URL{
 		Scheme:   "https",
@@ -46,8 +65,6 @@ func movieSearch(c echo.Context) error {
 	}
 
 	req, err := http.NewRequest("GET", u.String(), nil) //background context를 이용해 request를 만든다.
-
-	fmt.Println("Req >>>> ", req)
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Naver-Client-Id", "Tbe5UQm8vgGeeQwbfj_L")
@@ -64,7 +81,13 @@ func movieSearch(c echo.Context) error {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("data >>>> ", string(data))
+
+	var m movieData
+	err = json.Unmarshal(data, &m)
+	fmt.Println(m)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	return c.String(http.StatusOK, string(data))
 }

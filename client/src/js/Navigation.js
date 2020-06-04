@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Button, InputGroup, FormControl, Container, Row, Col} from 'react-bootstrap'
+import {Button, InputGroup, FormControl, Container, Row} from 'react-bootstrap'
 
 class Navigation extends React.Component{
 
