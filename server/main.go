@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -21,6 +24,7 @@ type item struct {
 	Director   string `json:"director"`
 	Actor      string `json:"actor"`
 	UserRating string `json:"userRating"`
+	Desc       string
 }
 
 type movieData struct {
@@ -42,14 +46,8 @@ func main() {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
-	e.GET("/test", test)
 	e.GET("/search", movieSearch)
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func test(c echo.Context) error {
-	fmt.Println("Server Starting...")
-	return c.File("home.html")
 }
 
 func movieSearch(c echo.Context) error {
@@ -84,10 +82,42 @@ func movieSearch(c echo.Context) error {
 
 	var m movieData
 	err = json.Unmarshal(data, &m)
-	fmt.Println(m)
+
+	items := m.Items
+	var movieCode []string
+
+	for _, item := range items {
+		movieCode = append(movieCode, strings.Replace(item.Link, "https://movie.naver.com/movie/bi/mi/basic.nhn?code=", "", 1))
+	}
+
+	getDetail(movieCode, items)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return c.String(http.StatusOK, string(data))
+	fmt.Println("test >>>> ", items)
+
+	return c.String(http.StatusOK, string(json.Marshal(items)))
+}
+
+func getDetail(movieCode []string, items []item) {
+
+	for i, code := range movieCode {
+		url := "https://movie.naver.com/movie/bi/mi/basic.nhn?code=" + code
+		resp, err := http.Get(url)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		defer resp.Body.Close()
+
+		doc, _ := goquery.NewDocumentFromReader(resp.Body)
+
+		desc := doc.Find(".con_tx").Text()
+
+		items[i].Desc = desc
+	}
+
 }
