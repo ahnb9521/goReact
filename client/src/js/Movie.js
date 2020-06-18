@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 
-function Movie({title, image, subtitle, link, pubDate, director, actor, userRating }) {
+function Movie({title, image, subtitle, link, pubDate, director, actor, userRating, desc }) {
     return (
         <Link to={{
             pathname:'',
@@ -12,8 +12,8 @@ function Movie({title, image, subtitle, link, pubDate, director, actor, userRati
         }}>
             <div className="movie__box">
                 <div className="movie__img"><img src={image} alt={title} title={title}/></div>
-                <div className="movie__Nm" dangerouslySetInnerHTML={{__html:title}}></div>
-                <div>{link.replace("https://movie.naver.com/movie/bi/mi/basic.nhn?code=","")}</div>
+                <h5><div className="movie__Nm" dangerouslySetInnerHTML={{__html:title}}></div></h5>
+                <div>{desc}</div>
             </div>
 
         </Link>
@@ -27,7 +27,8 @@ Movie.propTypes = {
     pubDate: PropTypes.string,
     director: PropTypes.string,
     actor: PropTypes.string,
-    userRating: PropTypes.number
+    userRating: PropTypes.string,
+    Desc: PropTypes.string,
 }
 
 export default Movie;

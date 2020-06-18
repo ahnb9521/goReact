@@ -9,15 +9,17 @@ class Search extends React.Component {
 
     state = {
         search: '',
-        movies: []
+        movies: [],
+        ranks: []
     }
 
     componentDidMount() {
         this.getMovies();
+        this.getRank();
     }
 
     render() {
-        const {movies} = this.state;
+        const {movies, ranks} = this.state;
         return (
             <div>
                 <Navigation search={this.state.search}/>
@@ -33,6 +35,7 @@ class Search extends React.Component {
                         director={movie.director}
                         actor={movie.actor}
                         userRating={movie.userRating}
+                        desc={movie.Desc}
                     />
                     
                 ))}
@@ -40,16 +43,9 @@ class Search extends React.Component {
                 <div className="ranking">
                     <h5>영화 순위</h5>
                     <hr></hr>
-                    <p>1.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
-                    <p>2.sdsds</p>
+                    {ranks.map((rank, i) => 
+                        <p>{i+1}. {rank}</p>
+                    )}
                 </div>
             </div>
         )
@@ -58,14 +54,21 @@ class Search extends React.Component {
     getMovies = async () => {
         const {location} = this.props;
         const search = location.state.search;
-        const {data: {
-                items
-            }} = await Axios.get(endpoint + "/search", {
+        const {data} = await Axios.get(endpoint + "/search", {
             params: {
                 query: search
             }
         });
-        this.setState({search: search, movies: items});
+        this.setState({search: search, movies: data});
+    }
+
+    getRank = async() => {
+        const {data} = await Axios.get(endpoint + "/rank",{
+            params: {
+
+            }
+        });
+        this.setState({ranks: data});
     }
 
 }

@@ -13,6 +13,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	encoding "github.com/suapapa/go_hangul/encoding/cp949"
 )
 
 type item struct {
@@ -47,6 +48,7 @@ func main() {
 	}))
 
 	e.GET("/search", movieSearch)
+	e.GET("/rank", getRank)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -96,9 +98,8 @@ func movieSearch(c echo.Context) error {
 		log.Fatalln(err)
 	}
 
-	fmt.Println("test >>>> ", items)
-
-	return c.String(http.StatusOK, string(json.Marshal(items)))
+	mapA, _ := json.Marshal(items)
+	return c.String(http.StatusOK, string(mapA)) //error
 }
 
 func getDetail(movieCode []string, items []item) {
@@ -117,7 +118,44 @@ func getDetail(movieCode []string, items []item) {
 
 		desc := doc.Find(".con_tx").Text()
 
+		if len(desc) > 500 {
+			desc = string(desc[0:500]) + "..."
+		}
+
 		items[i].Desc = desc
 	}
+
+}
+
+func getRank(c echo.Context) error {
+
+	url := "https://movie.naver.com/movie/sdb/rank/rmovie.nhn?sel=cnt&date=20200617"
+	resp, err := http.Get(url)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+
+	bodyReader, err := encoding.NewReader(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	doc, _ := goquery.NewDocumentFromReader(bodyReader)
+
+	var rank []string
+
+	doc.Find("div.tit3").Each(func(i int, s *goquery.Selection) {
+		val, _ := s.Find("a").Attr("title")
+		test := []byte(val)
+		fmt.Println("rankTit >>> ", string(test))
+
+		rank = append(rank, string(strings.TrimSpace(val)))
+	})
+
+	mapB, _ := json.Marshal(rank)
+
+	return c.String(http.StatusOK, string(mapB))
 
 }
