@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,6 +13,8 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	encoding "github.com/suapapa/go_hangul/encoding/cp949"
+
+	firebase "github.com/Ahyeon221/goReact/server/middleware"
 )
 
 type item struct {
@@ -49,6 +50,8 @@ func main() {
 
 	e.GET("/search", movieSearch)
 	e.GET("/rank", getRank)
+	e.POST("/review", firebase.Insert)
+	//e.PUT("/review", )
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -91,7 +94,6 @@ func movieSearch(c echo.Context) error {
 	for _, item := range items {
 		movieCode = append(movieCode, strings.Replace(item.Link, "https://movie.naver.com/movie/bi/mi/basic.nhn?code=", "", 1))
 	}
-
 	getDetail(movieCode, items)
 
 	if err != nil {
@@ -121,7 +123,7 @@ func getDetail(movieCode []string, items []item) {
 		if len(desc) > 500 {
 			desc = string(desc[0:500]) + "..."
 		}
-
+		items[i].Link = code
 		items[i].Desc = desc
 	}
 
@@ -129,7 +131,7 @@ func getDetail(movieCode []string, items []item) {
 
 func getRank(c echo.Context) error {
 
-	url := "https://movie.naver.com/movie/sdb/rank/rmovie.nhn?sel=cnt&date=20200617"
+	url := "https://movie.naver.com/movie/sdb/rank/rmovie.nhn?sel=cnt&date=20200622" //**수정필요 : 검색하는 당일날짜-1 로 수정 필요
 	resp, err := http.Get(url)
 
 	if err != nil {
@@ -148,10 +150,10 @@ func getRank(c echo.Context) error {
 
 	doc.Find("div.tit3").Each(func(i int, s *goquery.Selection) {
 		val, _ := s.Find("a").Attr("title")
-		test := []byte(val)
-		fmt.Println("rankTit >>> ", string(test))
 
-		rank = append(rank, string(strings.TrimSpace(val)))
+		if i < 20 {
+			rank = append(rank, string(strings.TrimSpace(val)))
+		}
 	})
 
 	mapB, _ := json.Marshal(rank)
